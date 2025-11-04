@@ -773,3 +773,35 @@ h2::after {
     opacity: 1;
     transform: translateY(0);
 }
+
+
+/* Estilos para la foto de perfil */
+.profile-photo {
+    width: 280px;
+    height: 280px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid var(--primary-color);
+    box-shadow: var(--shadow-lg);
+    transition: all 0.3s ease;
+}
+
+.profile-photo:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive para la foto de perfil */
+@media (max-width: 768px) {
+    .profile-photo {
+        width: 200px;
+        height: 200px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-photo {
+        width: 150px;
+        height: 150px;
+    }
+}
