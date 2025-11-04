@@ -1,0 +1,15 @@
+{
+  "name": "portafolio-personal",
+  "version": "1.0.0",
+  "description": "Portafolio personal - Analista de Sistemas Odoo",
+  "main": "index.html",
+  "scripts": {
+    "start": "serve -s . -l 10000"
+  },
+  "keywords": ["portafolio", "odoo", "analista-sistemas"],
+  "author": "Eduardo Peralta",
+  "license": "MIT",
+  "dependencies": {
+    "serve": "^14.2.1"
+  }
+}
