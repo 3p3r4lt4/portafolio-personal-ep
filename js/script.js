@@ -1,199 +1,161 @@
-// Smooth scrolling para navegación
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
+// ✅ URL FINAL Y DEFINITIVA para producción
+const API_URL = 'https://api-portfolio.odoo-experto.info/api/send-contact';
 
-// Efecto de header al hacer scroll
-window.addEventListener('scroll', function() {
-    const header = document.querySelector('.header');
-    if (window.scrollY > 100) {
-        header.style.background = 'rgba(255, 255, 255, 0.95)';
-        header.style.backdropFilter = 'blur(10px)';
-    } else {
-        header.style.background = 'var(--white)';
-        header.style.backdropFilter = 'none';
-    }
-});
-
-// FORMULARIO DE CONTACTO - CONEXIÓN A TU API VPS
-document.querySelector('.contact-form')?.addEventListener('submit', async function(e) {
+// Código completo mejorado
+document.querySelector('#formulario-contacto')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    console.log('📝 Formulario enviado');
+    // Obtener valores
+    const form = this;
+    const nombre = form.querySelector('input[type="text"]').value.trim();
+    const email = form.querySelector('input[type="email"]').value.trim();
+    const mensaje = form.querySelector('textarea').value.trim();
+    const submitBtn = form.querySelector('button[type="submit"]');
     
-    // Obtener elementos del formulario
-    const nameInput = this.querySelector('input[type="text"]');
-    const emailInput = this.querySelector('input[type="email"]');
-    const messageInput = this.querySelector('textarea');
-    const submitBtn = this.querySelector('button[type="submit"]');
-    
-    if (!nameInput || !emailInput || !messageInput || !submitBtn) {
-        alert('❌ Error en el formulario');
+    // Validación
+    if (!nombre || !email || !mensaje) {
+        mostrarError('Por favor completa todos los campos');
         return;
     }
     
-    // Validar campos
-    const nombre = nameInput.value.trim();
-    const email = emailInput.value.trim();
-    const mensaje = messageInput.value.trim();
-    
-    if (!nombre) {
-        alert('❌ Por favor, ingresa tu nombre');
-        nameInput.focus();
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        mostrarError('Por favor ingresa un email válido');
         return;
     }
     
-    if (!email || !email.includes('@')) {
-        alert('❌ Por favor, ingresa un email válido');
-        emailInput.focus();
-        return;
-    }
-    
-    if (!mensaje) {
-        alert('❌ Por favor, escribe un mensaje');
-        messageInput.focus();
-        return;
-    }
-    
-    // Mostrar estado de carga
+    // Estado de carga
     const originalText = submitBtn.textContent;
     submitBtn.textContent = 'Enviando...';
     submitBtn.disabled = true;
     
-    // Datos a enviar
-    const formData = {
-        name: nombre,
-        email: email,
-        message: mensaje
-    };
-    
-    console.log('📤 Datos a enviar:', formData);
-    
     try {
-        // URL de tu API en el VPS - ¡IMPORTANTE! Esta es tu IP
-        const API_URL = 'http://23.239.19.82:5001/api/send-contact';
-        
-        console.log('🌐 Conectando a:', API_URL);
+        console.log('📤 Enviando formulario a:', API_URL);
         
         const response = await fetch(API_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
+                'Accept': 'application/json'
             },
-            body: JSON.stringify(formData)
+            body: JSON.stringify({
+                name: nombre,
+                email: email,
+                message: mensaje
+            })
         });
         
-        console.log('📡 Estado de respuesta:', response.status);
+        console.log('📡 Estado:', response.status);
         
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
+        const data = await response.json();
         
-        const result = await response.json();
-        console.log('📥 Respuesta:', result);
-        
-        if (result.success) {
-            alert(result.message || '✅ ¡Mensaje enviado correctamente!');
-            this.reset(); // Limpiar formulario
+        if (data.success) {
+            mostrarExito(data.message || '✅ ¡Mensaje enviado correctamente!');
+            form.reset(); // Limpiar formulario
             
-            // También puedes mostrar un mensaje en la página
-            const successMessage = document.createElement('div');
-            successMessage.style.cssText = `
-                background: #10b981;
-                color: white;
-                padding: 15px;
-                border-radius: 5px;
-                margin-top: 20px;
-                text-align: center;
-            `;
-            successMessage.textContent = '✅ Mensaje enviado exitosamente';
-            
-            // Insertar después del formulario
-            this.parentNode.insertBefore(successMessage, this.nextSibling);
-            
-            // Eliminar mensaje después de 5 segundos
-            setTimeout(() => {
-                successMessage.remove();
-            }, 5000);
+            // Opcional: Enviar evento a Google Analytics
+            if (typeof gtag !== 'undefined') {
+                gtag('event', 'form_submit', {
+                    'event_category': 'contacto',
+                    'event_label': 'formulario_portafolio'
+                });
+            }
             
         } else {
-            alert(`❌ ${result.error || 'Error al enviar el mensaje'}`);
+            mostrarError(data.error || 'Error al enviar el mensaje');
         }
         
     } catch (error) {
-        console.error('❌ Error:', error);
-        alert('❌ Error de conexión. Por favor, inténtalo de nuevo más tarde.');
+        console.error('❌ Error de conexión:', error);
+        mostrarError('Error de conexión. Por favor, inténtalo de nuevo.');
     } finally {
-        // Restaurar botón
         submitBtn.textContent = originalText;
         submitBtn.disabled = false;
     }
 });
 
-// Animación de elementos al hacer scroll
-const observerOptions = {
-    threshold: 0.1,
-    rootMargin: '0px 0px -50px 0px'
-};
-
-const observer = new IntersectionObserver(function(entries) {
-    entries.forEach(entry => {
-        if (entry.isIntersecting) {
-            entry.target.style.opacity = '1';
-            entry.target.style.transform = 'translateY(0)';
-        }
-    });
-}, observerOptions);
-
-// Observar elementos para animación
-document.addEventListener('DOMContentLoaded', function() {
-    const animatedElements = document.querySelectorAll('.project-card, .skill-category');
+// Funciones auxiliares
+function mostrarExito(mensaje) {
+    // Eliminar mensajes anteriores
+    document.querySelectorAll('.alert-message').forEach(el => el.remove());
     
-    animatedElements.forEach(el => {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(20px)';
-        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-        observer.observe(el);
-    });
-});
-
-// Highlight de navegación activa
-function highlightActiveNav() {
-    const sections = document.querySelectorAll('section');
-    const navLinks = document.querySelectorAll('.nav a');
+    const alerta = document.createElement('div');
+    alerta.className = 'alert-message success';
+    alerta.innerHTML = `
+        <div style="
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+            animation: fadeInUp 0.5s ease-out;
+        ">
+            <div style="font-size: 24px; margin-bottom: 10px;">🎉</div>
+            <strong style="font-size: 16px;">${mensaje}</strong>
+            <div style="font-size: 14px; opacity: 0.9; margin-top: 8px;">
+                Te responderé pronto a tu email
+            </div>
+        </div>
+    `;
     
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        sections.forEach(section => {
-            const sectionTop = section.offsetTop;
-            const sectionHeight = section.clientHeight;
-            
-            if (scrollY >= (sectionTop - 200)) {
-                current = section.getAttribute('id');
-            }
-        });
-        
-        navLinks.forEach(link => {
-            link.classList.remove('active');
-            if (link.getAttribute('href') === `#${current}`) {
-                link.classList.add('active');
-            }
-        });
-    });
+    const form = document.querySelector('#formulario-contacto');
+    form.parentNode.insertBefore(alerta, form.nextSibling);
+    
+    setTimeout(() => {
+        alerta.style.opacity = '0';
+        alerta.style.transform = 'translateY(-10px)';
+        alerta.style.transition = 'all 0.5s ease';
+        setTimeout(() => alerta.remove(), 500);
+    }, 6000);
 }
 
-// Inicializar funciones
-document.addEventListener('DOMContentLoaded', function() {
-    highlightActiveNav();
-    document.querySelector('.nav a')?.classList.add('active');
-});
+function mostrarError(mensaje) {
+    const alerta = document.createElement('div');
+    alerta.className = 'alert-message error';
+    alerta.innerHTML = `
+        <div style="
+            background: #ef4444;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            animation: fadeIn 0.3s ease;
+        ">
+            ❌ ${mensaje}
+        </div>
+    `;
+    
+    const form = document.querySelector('#formulario-contacto');
+    form.parentNode.insertBefore(alerta, form.nextSibling);
+    
+    setTimeout(() => alerta.remove(), 5000);
+}
+
+// Añadir estilos CSS
+const style = document.createElement('style');
+style.textContent = `
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+    
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    
+    .alert-message {
+        animation: fadeInUp 0.5s ease-out;
+    }
+`;
+document.head.appendChild(style);
