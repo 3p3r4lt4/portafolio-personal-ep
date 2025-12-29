@@ -24,19 +24,119 @@ window.addEventListener('scroll', function() {
     }
 });
 
-// Formulario de contacto
-document.querySelector('.contact-form')?.addEventListener('submit', function(e) {
+// FORMULARIO DE CONTACTO - CONEXIÓN A TU API VPS
+document.querySelector('.contact-form')?.addEventListener('submit', async function(e) {
     e.preventDefault();
     
-    // Aquí puedes agregar la lógica para enviar el formulario
-    const formData = new FormData(this);
-    const data = Object.fromEntries(formData);
+    console.log('📝 Formulario enviado');
     
-    console.log('Datos del formulario:', data);
+    // Obtener elementos del formulario
+    const nameInput = this.querySelector('input[type="text"]');
+    const emailInput = this.querySelector('input[type="email"]');
+    const messageInput = this.querySelector('textarea');
+    const submitBtn = this.querySelector('button[type="submit"]');
     
-    // Simulación de envío exitoso
-    alert('¡Mensaje enviado! Te contactaré pronto.');
-    this.reset();
+    if (!nameInput || !emailInput || !messageInput || !submitBtn) {
+        alert('❌ Error en el formulario');
+        return;
+    }
+    
+    // Validar campos
+    const nombre = nameInput.value.trim();
+    const email = emailInput.value.trim();
+    const mensaje = messageInput.value.trim();
+    
+    if (!nombre) {
+        alert('❌ Por favor, ingresa tu nombre');
+        nameInput.focus();
+        return;
+    }
+    
+    if (!email || !email.includes('@')) {
+        alert('❌ Por favor, ingresa un email válido');
+        emailInput.focus();
+        return;
+    }
+    
+    if (!mensaje) {
+        alert('❌ Por favor, escribe un mensaje');
+        messageInput.focus();
+        return;
+    }
+    
+    // Mostrar estado de carga
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Enviando...';
+    submitBtn.disabled = true;
+    
+    // Datos a enviar
+    const formData = {
+        name: nombre,
+        email: email,
+        message: mensaje
+    };
+    
+    console.log('📤 Datos a enviar:', formData);
+    
+    try {
+        // URL de tu API en el VPS - ¡IMPORTANTE! Esta es tu IP
+        const API_URL = 'http://23.239.19.82:5001/api/send-contact';
+        
+        console.log('🌐 Conectando a:', API_URL);
+        
+        const response = await fetch(API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(formData)
+        });
+        
+        console.log('📡 Estado de respuesta:', response.status);
+        
+        if (!response.ok) {
+            throw new Error(`Error HTTP: ${response.status}`);
+        }
+        
+        const result = await response.json();
+        console.log('📥 Respuesta:', result);
+        
+        if (result.success) {
+            alert(result.message || '✅ ¡Mensaje enviado correctamente!');
+            this.reset(); // Limpiar formulario
+            
+            // También puedes mostrar un mensaje en la página
+            const successMessage = document.createElement('div');
+            successMessage.style.cssText = `
+                background: #10b981;
+                color: white;
+                padding: 15px;
+                border-radius: 5px;
+                margin-top: 20px;
+                text-align: center;
+            `;
+            successMessage.textContent = '✅ Mensaje enviado exitosamente';
+            
+            // Insertar después del formulario
+            this.parentNode.insertBefore(successMessage, this.nextSibling);
+            
+            // Eliminar mensaje después de 5 segundos
+            setTimeout(() => {
+                successMessage.remove();
+            }, 5000);
+            
+        } else {
+            alert(`❌ ${result.error || 'Error al enviar el mensaje'}`);
+        }
+        
+    } catch (error) {
+        console.error('❌ Error:', error);
+        alert('❌ Error de conexión. Por favor, inténtalo de nuevo más tarde.');
+    } finally {
+        // Restaurar botón
+        submitBtn.textContent = originalText;
+        submitBtn.disabled = false;
+    }
 });
 
 // Animación de elementos al hacer scroll
@@ -66,8 +166,6 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Agrega esto al archivo script.js existente
-
 // Highlight de navegación activa
 function highlightActiveNav() {
     const sections = document.querySelectorAll('section');
@@ -94,33 +192,8 @@ function highlightActiveNav() {
     });
 }
 
-// Animación de contadores para habilidades (opcional)
-function animateCounters() {
-    const counters = document.querySelectorAll('.counter');
-    
-    counters.forEach(counter => {
-        const target = +counter.getAttribute('data-target');
-        const increment = target / 100;
-        let current = 0;
-        
-        const updateCounter = () => {
-            if (current < target) {
-                current += increment;
-                counter.innerText = Math.ceil(current);
-                setTimeout(updateCounter, 20);
-            } else {
-                counter.innerText = target;
-            }
-        };
-        
-        updateCounter();
-    });
-}
-
-// Inicializar todas las funciones cuando el DOM esté listo
+// Inicializar funciones
 document.addEventListener('DOMContentLoaded', function() {
     highlightActiveNav();
-    
-    // Agregar clase active al primer enlace de navegación
     document.querySelector('.nav a')?.classList.add('active');
 });
