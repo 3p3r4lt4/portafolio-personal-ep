@@ -1,245 +1,265 @@
-// ============================================
-// SCRIPT DE DIAGNÓSTICO AVANZADO
-// ============================================
-
-const API_URL = 'https://api-portfolio.odoo-experto.info/api/send-contact';
-
-// Formulario con diagnóstico completo
-document.getElementById('formulario-contacto')?.addEventListener('submit', async function(e) {
-    e.preventDefault();
+// js/script.js - Portfolio Contact Form Handler
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('✅ Portfolio script loaded');
     
-    console.log('\n' + '='.repeat(60));
-    console.log('🔍 DIAGNÓSTICO DE ENVÍO');
-    console.log('='.repeat(60));
+    // ========================================
+    // FORMULARIO DE CONTACTO
+    // ========================================
+    const contactForm = document.getElementById('contactForm');
     
-    const form = this;
-    const nombre = form.querySelector('input[type="text"]').value.trim();
-    const email = form.querySelector('input[type="email"]').value.trim();
-    const mensaje = form.querySelector('textarea').value.trim();
-    const submitBtn = form.querySelector('button[type="submit"]');
-    
-    // Validaciones
-    if (!nombre || !email || !mensaje) {
-        mostrarNotificacion('error', '❌ Completa todos los campos');
-        return;
+    if (contactForm) {
+        contactForm.addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            // Obtener valores del formulario
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const service = document.getElementById('service').value;
+            const message = document.getElementById('message').value.trim();
+            
+            // Validación básica
+            if (!name || !email || !service || !message) {
+                showAlert('⚠️ Por favor completa todos los campos', 'warning');
+                return;
+            }
+            
+            // Validar email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showAlert('⚠️ Por favor ingresa un email válido', 'warning');
+                return;
+            }
+            
+            // Deshabilitar botón y mostrar loading
+            const submitBtn = contactForm.querySelector('button[type="submit"]');
+            const originalText = submitBtn.textContent;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando...';
+            
+            try {
+                // URL de tu API Backend
+                const API_URL = 'https://api.store-odoo.com/api/send-contact';
+                
+                console.log('📤 Enviando mensaje a:', API_URL);
+                
+                // Preparar datos
+                const formData = {
+                    name: name,
+                    email: email,
+                    service: service,
+                    message: `[Servicio: ${getServiceName(service)}]\n\n${message}`
+                };
+                
+                console.log('📋 Datos:', formData);
+                
+                // Enviar solicitud
+                const response = await fetch(API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                console.log('📥 Respuesta recibida:', response.status);
+                
+                const data = await response.json();
+                console.log('📊 Datos respuesta:', data);
+                
+                if (response.ok && data.success) {
+                    // ✅ Éxito
+                    showAlert('✅ ¡Mensaje enviado exitosamente! Te contactaré pronto por Telegram.', 'success');
+                    contactForm.reset();
+                    
+                    // Google Analytics (opcional)
+                    if (typeof gtag !== 'undefined') {
+                        gtag('event', 'form_submit', {
+                            'event_category': 'Contact',
+                            'event_label': service
+                        });
+                    }
+                } else {
+                    throw new Error(data.error || 'Error al enviar el mensaje');
+                }
+                
+            } catch (error) {
+                console.error('❌ Error:', error);
+                showAlert(
+                    '❌ Error al enviar el mensaje. Por favor, intenta de nuevo o escríbeme directamente a: lowcodeperu24@gmail.com',
+                    'error'
+                );
+            } finally {
+                // Rehabilitar botón
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalText;
+            }
+        });
     }
     
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-        mostrarNotificacion('error', '❌ Email inválido');
-        return;
-    }
+    // ========================================
+    // MENÚ MÓVIL
+    // ========================================
+    const menuToggle = document.getElementById('menuToggle');
+    const headerNav = document.getElementById('headerNav');
     
-    // Loading
-    const textoOriginal = submitBtn.textContent;
-    submitBtn.textContent = '⏳ Enviando...';
-    submitBtn.disabled = true;
-    
-    console.log('📝 Datos a enviar:', { nombre, email, mensaje: mensaje.substring(0, 30) + '...' });
-    console.log('🌐 URL destino:', API_URL);
-    console.log('⏰ Timestamp:', new Date().toISOString());
-    
-    try {
-        console.log('\n📤 PASO 1: Iniciando fetch...');
-        
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 10000); // 10 segundos
-        
-        const response = await fetch(API_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
-            },
-            body: JSON.stringify({
-                name: nombre,
-                email: email,
-                message: mensaje
-            }),
-            mode: 'cors',
-            signal: controller.signal
+    if (menuToggle && headerNav) {
+        menuToggle.addEventListener('click', function() {
+            headerNav.classList.toggle('header__nav--open');
+            
+            // Cambiar icono
+            const icon = menuToggle.querySelector('i');
+            if (headerNav.classList.contains('header__nav--open')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            } else {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            }
         });
         
-        clearTimeout(timeoutId);
-        
-        console.log('✅ PASO 2: Respuesta recibida');
-        console.log('   Status:', response.status, response.statusText);
-        console.log('   Type:', response.type);
-        console.log('   OK:', response.ok);
-        console.log('   Headers:');
-        for (const [key, value] of response.headers.entries()) {
-            console.log(`      ${key}: ${value}`);
-        }
-        
-        console.log('\n📄 PASO 3: Parseando respuesta...');
-        const contentType = response.headers.get('content-type');
-        console.log('   Content-Type:', contentType);
-        
-        let data;
-        const responseText = await response.text();
-        console.log('   Body (raw):', responseText.substring(0, 200));
-        
-        try {
-            data = JSON.parse(responseText);
-            console.log('   Body (parsed):', data);
-        } catch (parseError) {
-            console.error('   ❌ Error parseando JSON:', parseError.message);
-            throw new Error('Respuesta no es JSON válido');
-        }
-        
-        console.log('\n🎯 PASO 4: Evaluando resultado...');
-        if (response.ok && data.success) {
-            console.log('   ✅ ÉXITO TOTAL');
-            mostrarNotificacion('success', '✅ ' + (data.message || '¡Mensaje enviado!'));
-            form.reset();
-        } else {
-            console.log('   ❌ ERROR DEL SERVIDOR');
-            console.log('   Detalle:', data.error || data);
-            mostrarNotificacion('error', '❌ ' + (data.error || 'Error al enviar'));
-        }
-        
-    } catch (error) {
-        console.error('\n' + '❌'.repeat(30));
-        console.error('ERROR CAPTURADO:');
-        console.error('❌'.repeat(30));
-        console.error('Tipo:', error.constructor.name);
-        console.error('Nombre:', error.name);
-        console.error('Mensaje:', error.message);
-        console.error('Stack:', error.stack);
-        console.error('❌'.repeat(30) + '\n');
-        
-        // Diagnóstico específico
-        let diagnostico = '';
-        let solucion = '';
-        
-        if (error.name === 'AbortError') {
-            diagnostico = 'Timeout - El servidor tardó más de 10 segundos en responder';
-            solucion = 'Verifica que el servicio portfolio-api esté corriendo en el VPS';
-        } else if (error.message.includes('Failed to fetch') || error.name === 'TypeError') {
-            diagnostico = 'No se pudo conectar al servidor';
-            solucion = 'Posibles causas:\n' +
-                      '1. El servicio portfolio-api no está corriendo\n' +
-                      '2. El túnel cloudflared no está activo\n' +
-                      '3. El firewall está bloqueando el puerto\n' +
-                      '4. Problema de DNS con api-portfolio.odoo-experto.info';
-        } else if (error.message.includes('CORS')) {
-            diagnostico = 'Problema de CORS';
-            solucion = 'Los headers CORS no están configurados correctamente en el backend';
-        } else if (error.message.includes('JSON')) {
-            diagnostico = 'Respuesta no es JSON válido';
-            solucion = 'El servidor está respondiendo pero con formato incorrecto';
-        } else {
-            diagnostico = error.message;
-            solucion = 'Error desconocido - revisa los logs del servidor';
-        }
-        
-        console.log('\n🔍 DIAGNÓSTICO:');
-        console.log('   Problema:', diagnostico);
-        console.log('   Solución:', solucion);
-        
-        mostrarNotificacion('error', `❌ ${diagnostico}`);
-        
-    } finally {
-        submitBtn.textContent = textoOriginal;
-        submitBtn.disabled = false;
-        console.log('\n' + '='.repeat(60));
-        console.log('FIN DEL DIAGNÓSTICO');
-        console.log('='.repeat(60) + '\n');
+        // Cerrar menú al hacer click en un link
+        const navLinks = headerNav.querySelectorAll('.header__link');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                headerNav.classList.remove('header__nav--open');
+                const icon = menuToggle.querySelector('i');
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            });
+        });
     }
+    
+    // ========================================
+    // SMOOTH SCROLL
+    // ========================================
+    const links = document.querySelectorAll('a[href^="#"]');
+    links.forEach(link => {
+        link.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            if (href !== '#') {
+                e.preventDefault();
+                const target = document.querySelector(href);
+                if (target) {
+                    const headerHeight = document.querySelector('.header').offsetHeight;
+                    const targetPosition = target.offsetTop - headerHeight;
+                    
+                    window.scrollTo({
+                        top: targetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            }
+        });
+    });
+    
+    // ========================================
+    // ANIMACIÓN AL SCROLL (opcional)
+    // ========================================
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -100px 0px'
+    };
+    
+    const observer = new IntersectionObserver(function(entries) {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.style.opacity = '1';
+                entry.target.style.transform = 'translateY(0)';
+            }
+        });
+    }, observerOptions);
+    
+    // Observar elementos que queremos animar
+    const animatedElements = document.querySelectorAll('.skill-card, .ai-project-card, .work-card');
+    animatedElements.forEach(el => {
+        el.style.opacity = '0';
+        el.style.transform = 'translateY(20px)';
+        el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+        observer.observe(el);
+    });
+    
+    // ========================================
+    // FUNCIONES AUXILIARES
+    // ========================================
+    
+    /**
+     * Mostrar alerta personalizada
+     */
+    function showAlert(message, type = 'info') {
+        // Eliminar alertas anteriores
+        const existingAlert = document.querySelector('.custom-alert');
+        if (existingAlert) {
+            existingAlert.remove();
+        }
+        
+        // Crear alerta
+        const alert = document.createElement('div');
+        alert.className = `custom-alert custom-alert--${type}`;
+        alert.innerHTML = `
+            <div class="custom-alert__content">
+                <span class="custom-alert__message">${message}</span>
+                <button class="custom-alert__close">&times;</button>
+            </div>
+        `;
+        
+        // Agregar al body
+        document.body.appendChild(alert);
+        
+        // Mostrar con animación
+        setTimeout(() => {
+            alert.classList.add('custom-alert--show');
+        }, 10);
+        
+        // Cerrar al hacer click en X
+        const closeBtn = alert.querySelector('.custom-alert__close');
+        closeBtn.addEventListener('click', () => {
+            closeAlert(alert);
+        });
+        
+        // Auto-cerrar después de 5 segundos
+        setTimeout(() => {
+            closeAlert(alert);
+        }, 5000);
+    }
+    
+    /**
+     * Cerrar alerta con animación
+     */
+    function closeAlert(alert) {
+        alert.classList.remove('custom-alert--show');
+        setTimeout(() => {
+            alert.remove();
+        }, 300);
+    }
+    
+    /**
+     * Obtener nombre del servicio
+     */
+    function getServiceName(serviceValue) {
+        const services = {
+            'odoo': 'Desarrollo Odoo',
+            'ai': 'Agentes AI',
+            'automation': 'Automatización',
+            'vps': 'Implementación VPS',
+            'other': 'Otro'
+        };
+        return services[serviceValue] || serviceValue;
+    }
+    
+    // ========================================
+    // HEADER STICKY CON SHADOW
+    // ========================================
+    const header = document.querySelector('.header');
+    if (header) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                header.style.boxShadow = '0 4px 12px rgba(0, 0, 0, 0.15)';
+            } else {
+                header.style.boxShadow = '0 4px 6px -1px rgba(0, 0, 0, 0.05)';
+            }
+        });
+    }
+    
+    console.log('🎯 Script inicializado completamente');
 });
-
-// Test de conectividad al cargar
-window.addEventListener('DOMContentLoaded', async () => {
-    console.log('\n🧪 TEST AUTOMÁTICO DE CONECTIVIDAD\n');
-    
-    // Test 1: Health check
-    try {
-        console.log('Test 1: Health endpoint...');
-        const healthUrl = API_URL.replace('/send-contact', '/health');
-        const response = await fetch(healthUrl, { method: 'GET', mode: 'cors' });
-        console.log('✅ Health check:', response.status);
-        const data = await response.json();
-        console.log('   Respuesta:', data);
-    } catch (error) {
-        console.error('❌ Health check falló:', error.message);
-    }
-    
-    // Test 2: OPTIONS (CORS preflight)
-    try {
-        console.log('\nTest 2: CORS preflight...');
-        const response = await fetch(API_URL, { method: 'OPTIONS', mode: 'cors' });
-        console.log('✅ OPTIONS:', response.status);
-        console.log('   CORS headers:');
-        console.log('      Allow-Origin:', response.headers.get('access-control-allow-origin'));
-        console.log('      Allow-Methods:', response.headers.get('access-control-allow-methods'));
-        console.log('      Allow-Headers:', response.headers.get('access-control-allow-headers'));
-    } catch (error) {
-        console.error('❌ CORS preflight falló:', error.message);
-    }
-    
-    // Test 3: DNS resolution
-    try {
-        console.log('\nTest 3: Resolución DNS...');
-        const hostname = new URL(API_URL).hostname;
-        console.log('   Hostname:', hostname);
-        // En navegador no podemos hacer DNS lookup directo, pero fetch lo intentará
-    } catch (error) {
-        console.error('❌ DNS test error:', error.message);
-    }
-    
-    console.log('\n✅ Tests completados. Ahora prueba el formulario.\n');
-});
-
-// Función de notificaciones
-function mostrarNotificacion(tipo, mensaje) {
-    document.querySelectorAll('.notificacion-flotante').forEach(el => el.remove());
-    
-    const notif = document.createElement('div');
-    notif.className = 'notificacion-flotante';
-    const color = tipo === 'success' ? '#10b981' : '#ef4444';
-    const icono = tipo === 'success' ? '✅' : '❌';
-    
-    notif.innerHTML = `
-        <div style="
-            background: ${color};
-            color: white;
-            padding: 18px 24px;
-            border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            position: fixed;
-            top: 30px;
-            right: 30px;
-            z-index: 10000;
-            max-width: 420px;
-            animation: slideIn 0.4s ease-out;
-        ">
-            <div style="font-size: 22px;">${icono}</div>
-            <div style="flex: 1; white-space: pre-line;">${mensaje}</div>
-            <button onclick="this.closest('.notificacion-flotante').remove()" 
-                    style="background:none;border:none;color:white;font-size:20px;cursor:pointer;">×</button>
-        </div>
-    `;
-    
-    document.body.appendChild(notif);
-    setTimeout(() => notif.remove(), 8000);
-}
-
-// CSS
-const styles = document.createElement('style');
-styles.textContent = `
-    @keyframes slideIn {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
-    }
-    .contact-form input:focus,
-    .contact-form textarea:focus {
-        border-color: #3b82f6;
-        box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-    }
-`;
-document.head.appendChild(styles);
-
-console.log('✅ Script de diagnóstico cargado');
-console.log('📍 API URL:', API_URL);

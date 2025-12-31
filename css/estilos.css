@@ -806,3 +806,89 @@ body {
         padding: 60px 0;
     }
 }
+
+/* ===== ALERTAS PERSONALIZADAS ===== */
+.custom-alert {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    min-width: 300px;
+    max-width: 500px;
+    padding: 0;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    opacity: 0;
+    transform: translateX(400px);
+    transition: all 0.3s ease;
+}
+
+.custom-alert--show {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.custom-alert__content {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    gap: 15px;
+}
+
+.custom-alert__message {
+    flex: 1;
+    font-size: 0.95rem;
+    line-height: 1.5;
+    color: #2c3e50;
+}
+
+.custom-alert__close {
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    color: #7f8c8d;
+    cursor: pointer;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+}
+
+.custom-alert__close:hover {
+    background: #ecf0f1;
+    color: #2c3e50;
+}
+
+/* Tipos de alertas */
+.custom-alert--success {
+    border-left: 4px solid #27ae60;
+}
+
+.custom-alert--error {
+    border-left: 4px solid #e74c3c;
+}
+
+.custom-alert--warning {
+    border-left: 4px solid #f39c12;
+}
+
+.custom-alert--info {
+    border-left: 4px solid #3498db;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+    .custom-alert {
+        top: 10px;
+        right: 10px;
+        left: 10px;
+        min-width: auto;
+        max-width: none;
+    }
+}
