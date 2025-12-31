@@ -4,190 +4,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Portafolio - Analista de Sistemas Odoo</title>
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Eduardo Peralta - Desarrollador Odoo & AI</title>
+    <link rel="stylesheet" href="/portafolio-personal-ep/css/estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 
 <body>
     <!-- Header -->
     <header class="header">
-        <div class="container">
-            <div class="logo">
-                <h1>Eduardo Peralta</h1>
-            </div>
-
-            <nav class="nav">
-                <ul>
-                    <li><a href="#inicio">Inicio</a></li>
-                    <li><a href="#sobre-mi">Sobre Mi</a></li>
-                    <li><a href="#habilidades">Habilidades</a></li>
-                    <li><a href="#proyectos">Proyectos</a></li>
-                    <li><a href="#contacto">Contacto</a></li>
+        <div class="container header__container">
+            <div class="header__logo">EDUARDO PERALTA</div>
+            <nav class="header__nav" id="headerNav">
+                <ul class="header__list">
+                    <li><a href="#inicio" class="header__link">Inicio</a></li>
+                    <li><a href="#habilidades" class="header__link">Habilidades</a></li>
+                    <li><a href="#proyectos-ai" class="header__link">Proyectos AI</a></li>
+                    <li><a href="#trabajos" class="header__link">Portafolio</a></li>
+                    <li><a href="#contacto" class="header__link">Contacto</a></li>
                 </ul>
             </nav>
+            <button class="header__menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
         </div>
     </header>
 
     <main>
-        <!-- Hero Section -->
+        <!-- Hero -->
         <section id="inicio" class="hero">
-            <div class="container">
-                <div class="hero-content">
-                    <h1>Analista de Sistemas Odoo</h1>
-                    <p>Especialista en desarrollo, implementación y mantenimiento de ERP Odoo v13</p>
-                    <div class="hero-buttons">
-                        <a href="#proyectos" class="btn btn-primary">Ver Proyectos</a>
-                        <a href="#contacto" class="btn btn-secondary">Contactar</a>
+            <div class="container hero__container">
+                <div class="hero__content">
+                    <h1 class="hero__title">Desarrollador Odoo & <span class="hero__title--highlight">Agentes AI</span>
+                    </h1>
+                    <p class="hero__description">Especialista en implementación de Odoo v13 y desarrollo de agentes AI
+                        con Make, Botpress + Odoo para automatización de procesos empresariales.</p>
+                    <div class="hero__buttons">
+                        <a href="#proyectos-ai" class="btn btn--primary">Proyectos AI</a>
+                        <a href="#contacto" class="btn btn--secondary">Contactar</a>
+                    </div>
+                </div>
+                <div class="hero__profile">
+                    <div class="profile-card">
+                        <div class="profile-card__image">
+                            <img src="assets/profile.png" alt="Eduardo Peralta" class="profile-card__photo">
+                            <div class="profile-card__badge">
+                                <i class="fas fa-robot"></i>
+                                AI Developer
+                            </div>
+                        </div>
+                        <div class="profile-card__content">
+                            <h3 class="profile-card__name">Eduardo Peralta</h3>
+                            <p class="profile-card__role">Desarrollador Full Stack</p>
+                            <div class="profile-card__stats">
+                                <div class="profile-card__stat">
+                                    <span class="profile-card__stat-number">3+</span>
+                                    <span class="profile-card__stat-label">Años Exp.</span>
+                                </div>
+                                <div class="profile-card__stat">
+                                    <span class="profile-card__stat-number">10+</span>
+                                    <span class="profile-card__stat-label">Proyectos</span>
+                                </div>
+                                <div class="profile-card__stat">
+                                    <span class="profile-card__stat-number">5+</span>
+                                    <span class="profile-card__stat-label">Clientes</span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Sobre Mi -->
-        <section id="sobre-mi" class="about">
+        <!-- Skills -->
+        <section id="habilidades" class="section section--white">
             <div class="container">
-                <h2>Sobre Mi</h2>
-                <div class="about-content">
-                    <div class="about-text">
-                        <p>Soy Analista de Sistemas especializado en Odoo v13, actualmente brindo mantenimiento a un
-                            sistema ERP en una empresa de telecomunicaciones.</p>
+                <h2 class="section__title">Mis <span class="section__title--highlight">Habilidades</span></h2>
+                <p class="section__subtitle">Desarrollo soluciones completas integrando Odoo, agentes AI y
+                    automatización de procesos.</p>
 
-                        <div class="experience">
-                            <h3>Mi Experiencia</h3>
-                            <ul>
-                                <li>Mantenimiento preventivo y correctivo de instancias Odoo en producción</li>
-                                <li>Desarrollo de módulos y funcionalidades específicas en Python y XML</li>
-                                <li>Implementación y configuración de Odoo en servidores cloud</li>
-                                <li>Automatización de procesos con herramientas modernas</li>
+                <div class="skills__grid">
+                    <div class="skill-card">
+                        <div class="skill-card__icon skill-card__icon--odoo">
+                            <i class="fab fa-python"></i>
+                        </div>
+                        <h3 class="skill-card__title">Odoo v13</h3>
+                        <p class="skill-card__description">Desarrollo e implementación de módulos personalizados en Odoo
+                            v13 para diversas industrias.</p>
+                        <ul class="skill-card__list">
+                            <li>Módulos personalizados</li>
+                            <li>Integración APIs</li>
+                            <li>VPS Deployment</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-card__icon skill-card__icon--ai">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h3 class="skill-card__title">Agentes AI</h3>
+                        <p class="skill-card__description">Desarrollo de agentes inteligentes con Make, Botpress y Odoo
+                            para automatización.</p>
+                        <ul class="skill-card__list">
+                            <li>Botpress + Odoo</li>
+                            <li>Make Automation</li>
+                            <li>Chatbots IA</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-card__icon skill-card__icon--vps">
+                            <i class="fas fa-server"></i>
+                        </div>
+                        <h3 class="skill-card__title">VPS Implementation</h3>
+                        <p class="skill-card__description">Implementación y gestión de servidores en DigitalOcean,
+                            Linode y otros proveedores.</p>
+                        <ul class="skill-card__list">
+                            <li>DigitalOcean</li>
+                            <li>Linode</li>
+                            <li>AWS/Azure</li>
+                        </ul>
+                    </div>
+
+                    <div class="skill-card">
+                        <div class="skill-card__icon skill-card__icon--integration">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h3 class="skill-card__title">Integraciones</h3>
+                        <p class="skill-card__description">Conexión de Odoo con múltiples plataformas y servicios
+                            mediante APIs y webhooks.</p>
+                        <ul class="skill-card__list">
+                            <li>APIs REST</li>
+                            <li>Webhooks</li>
+                            <li>WebServices</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- AI Projects -->
+        <section id="proyectos-ai" class="section section--dark">
+            <div class="container">
+                <h2 class="section__title section__title--light">Proyectos de <span
+                        class="section__title--highlight">Inteligencia Artificial</span></h2>
+                <p class="section__subtitle section__subtitle--light">Desarrollo de agentes AI especializados en
+                    automatización empresarial y atención al cliente.</p>
+
+                <div class="ai-projects__grid">
+                    <div class="ai-project-card">
+                        <div class="ai-project-card__header">
+                            <div class="ai-project-card__icon">
+                                <i class="fas fa-headset"></i>
+                            </div>
+                            <h3 class="ai-project-card__title">Agente de Atención de Leads</h3>
+                        </div>
+                        <div class="ai-project-card__content">
+                            <p class="ai-project-card__description">Sistema automatizado de captación y cualificación de
+                                leads integrado con Odoo CRM.</p>
+                            <ul class="ai-project-card__features">
+                                <li><i class="fas fa-check"></i> Botpress + Odoo Integration</li>
+                                <li><i class="fas fa-check"></i> Automatización Make</li>
+                                <li><i class="fas fa-check"></i> Qualificación inteligente</li>
                             </ul>
+                            <div class="ai-project-card__tech">
+                                <span>Botpress</span>
+                                <span>Make</span>
+                                <span>Odoo</span>
+                                <span>Python</span>
+                            </div>
                         </div>
                     </div>
 
+                    <div class="ai-project-card">
+                        <div class="ai-project-card__header">
+                            <div class="ai-project-card__icon">
+                                <i class="fas fa-comments"></i>
+                            </div>
+                            <h3 class="ai-project-card__title">Chatbot de Soporte</h3>
+                        </div>
+                        <div class="ai-project-card__content">
+                            <p class="ai-project-card__description">Asistente virtual para soporte técnico y consultas
+                                frecuentes de clientes.</p>
+                            <ul class="ai-project-card__features">
+                                <li><i class="fas fa-check"></i> NLP Integrado</li>
+                                <li><i class="fas fa-check"></i> Base de conocimiento</li>
+                                <li><i class="fas fa-check"></i> Escalación a agente humano</li>
+                            </ul>
+                            <div class="ai-project-card__tech">
+                                <span>Dialogflow</span>
+                                <span>Odoo</span>
+                                <span>Webhooks</span>
+                                <span>JavaScript</span>
+                            </div>
+                        </div>
+                    </div>
 
-                    <div class="profile-image">
-                        <img src="assets/profile.png" alt="Eduardo Peralta - Analista de Sistemas Odoo"
-                            class="profile-photo">
+                    <div class="ai-project-card">
+                        <div class="ai-project-card__header">
+                            <div class="ai-project-card__icon">
+                                <i class="fas fa-cogs"></i>
+                            </div>
+                            <h3 class="ai-project-card__title">Automatización de Procesos</h3>
+                        </div>
+                        <div class="ai-project-card__content">
+                            <p class="ai-project-card__description">Sistema de automatización de flujos de trabajo
+                                empresariales con Make.</p>
+                            <ul class="ai-project-card__features">
+                                <li><i class="fas fa-check"></i> Integración multi-plataforma</li>
+                                <li><i class="fas fa-check"></i> Triggers automáticos</li>
+                                <li><i class="fas fa-check"></i> Monitoreo en tiempo real</li>
+                            </ul>
+                            <div class="ai-project-card__tech">
+                                <span>Make</span>
+                                <span>Odoo</span>
+                                <span>APIs</span>
+                                <span>Python</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Habilidades Técnicas -->
-        <section id="habilidades" class="skills">
+        <!-- Works -->
+        <section id="trabajos" class="section">
             <div class="container">
-                <h2>Habilidades Técnicas</h2>
+                <h2 class="section__title">Portafolio <span class="section__title--highlight">Destacado</span></h2>
+                <p class="section__subtitle">Proyectos recientes donde he aplicado mis habilidades en desarrollo e
+                    implementación.</p>
 
-                <!-- Odoo & ERP -->
-                <div class="skill-category">
-                    <h3>Odoo & ERP</h3>
-                    <div class="skill-items">
-                        <span class="skill-tag">Odoo v13</span>
-                        <span class="skill-tag">Mantenimiento</span>
-                        <span class="skill-tag">Desarrollo Módulos</span>
-                        <span class="skill-tag">Python Odoo</span>
-                        <span class="skill-tag">XML</span>
+                <div class="works__grid">
+                    <div class="work-card">
+                        <div class="work-card__image work-card__image--cover">
+                            <div class="work-card__overlay">
+                                <h3 class="work-card__name">Personalización ERP Odoo</h3>
+                                <p class="work-card__category">Sistema de Gestión</p>
+                            </div>
+                        </div>
+                        <div class="work-card__content">
+                            <h3 class="work-card__title">Cover ERP</h3>
+                            <p class="work-card__description">Desarrollo de sistema de gestión empresarial con Odoo v13
+                                implementado en VPS.</p>
+                            <div class="work-card__tags">
+                                <span>Odoo</span>
+                                <span>Python</span>
+                                <span>PostgreSQL</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Cloud & Servidores -->
-                <div class="skill-category">
-                    <h3>Cloud & Servidores</h3>
-                    <div class="skill-items">
-                        <span class="skill-tag">AWS</span>
-                        <span class="skill-tag">Linode</span>
-                        <span class="skill-tag">DigitalOcean</span>
-                        <span class="skill-tag">Alta Disponibilidad</span>
+                    <div class="work-card">
+                        <div class="work-card__image work-card__image--crm">
+                            <div class="work-card__overlay">
+                                <h3 class="work-card__name">CRM Leads</h3>
+                                <p class="work-card__category">Automatización AI</p>
+                            </div>
+                        </div>
+                        <div class="work-card__content">
+                            <h3 class="work-card__title">CRM Automatizado</h3>
+                            <p class="work-card__description">Implementación de sistema de captación y cualificación de
+                                leads con Odoo + Botpress + Make.</p>
+                            <div class="work-card__tags">
+                                <span>Botpress</span>
+                                <span>Make</span>
+                                <span>Odoo</span>
+                                <span>APIs</span>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Automatización -->
-                <div class="skill-category">
-                    <h3>Automatización</h3>
-                    <div class="skill-items">
-                        <span class="skill-tag">Streamlit</span>
-                        <span class="skill-tag">BotPress</span>
-                        <span class="skill-tag">Make</span>
-                        <span class="skill-tag">N8N</span>
+                    <div class="work-card">
+                        <div class="work-card__image work-card__image--finanzas">
+                            <div class="work-card__overlay">
+                                <h3 class="work-card__name">Finanzas AI</h3>
+                                <p class="work-card__category">Procesamiento LLM</p>
+                            </div>
+                        </div>
+                        <div class="work-card__content">
+                            <h3 class="work-card__title">Asistente Financiero</h3>
+                            <p class="work-card__description">Sistema de análisis financiero con Telegram, Groq LLM,
+                                procesamiento de audio y Google Sheets.</p>
+                            <div class="work-card__tags">
+                                <span>Groq LLM</span>
+                                <span>Telegram</span>
+                                <span>Google Sheets</span>
+                                <span>Python</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Proyectos -->
-        <section id="proyectos" class="projects">
+        <!-- Contact -->
+        <section id="contacto" class="section section--white">
             <div class="container">
-                <h2>Proyectos Destacados</h2>
-                <div class="projects-grid">
-                    <article class="project-card">
-                        <h3>Módulo de Telecomunicaciones Odoo</h3>
-                        <p>Desarrollo de módulo personalizado para gestión de servicios de telecomunicaciones</p>
-                        <div class="project-tech">
-                            <span>Python</span>
-                            <span>XML</span>
-                            <span>Odoo</span>
-                        </div>
-                    </article>
+                <h2 class="section__title">¿Listo para <span class="section__title--highlight">trabajar juntos</span>?
+                </h2>
+                <p class="section__subtitle">Contáctame para discutir tu proyecto de Odoo, Agentes AI o automatización.
+                </p>
 
-                    <article class="project-card">
-                        <h3>Implementación Cloud AWS</h3>
-                        <p>Configuración de Odoo en AWS con alta disponibilidad y balanceo de carga</p>
-                        <div class="project-tech">
-                            <span>AWS</span>
-                            <span>Linux</span>
-                            <span>Nginx</span>
-                        </div>
-                    </article>
-
-                    <article class="project-card">
-                        <h3>Sistema de Automatización</h3>
-                        <p>Flujos de trabajo automatizados con Make y N8N para procesos empresariales</p>
-                        <div class="project-tech">
-                            <span>Make</span>
-                            <span>N8N</span>
-                            <span>API</span>
-                        </div>
-                    </article>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contacto -->
-        <section id="contacto" class="contact">
-            <div class="container">
-                <h2>Contacto</h2>
-                <div class="contact-content">
-                    <div class="contact-info">
-                        <h3>¿Tienes un proyecto en mente?</h3>
-                        <p>Estoy disponible para colaborar en proyectos relacionados con Odoo y automatización.</p>
-
-                        <div class="contact-details">
-                            <div class="contact-item">
-                                <strong>Email:</strong>
-                                <span>3p3r4lt4AL@gmail.com</span>
+                <div class="contact__content">
+                    <div class="contact__info">
+                        <div class="contact-item">
+                            <div class="contact-item__icon">
+                                <i class="fab fa-linkedin"></i>
                             </div>
-                            <div class="contact-item">
-                                <strong>GitHub:</strong>
-                                <span>3p3r4lt4</span>
+                            <div class="contact-item__details">
+                                <h3>LinkedIn</h3>
+                                <a href="https://www.linkedin.com/in/eduardo-peralta-quicaño-a53766b8"
+                                    target="_blank">eduardo-peralta-quicaño</a>
                             </div>
-                            <div class="contact-item">
-                                <strong>Especialidad:</strong>
-                                <span>Odoo v13 & Automatización</span>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-item__icon">
+                                <i class="fab fa-github"></i>
+                            </div>
+                            <div class="contact-item__details">
+                                <h3>GitHub</h3>
+                                <a href="https://github.com/3p3r4lt4" target="_blank">@eduardoperalta</a>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-item__icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-item__details">
+                                <h3>Email</h3>
+                                <p>lowcodeperu24@gmail.com</p>
+                            </div>
+                        </div>
+
+                        <div class="contact-item">
+                            <div class="contact-item__icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-item__details">
+                                <h3>Ubicación</h3>
+                                <p>Lima, Perú</p>
                             </div>
                         </div>
                     </div>
 
-                    <form id="formulario-contacto" class="contact-form">
-                        <div class="form-group">
-                            <input type="text" placeholder="Nombre" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" placeholder="Email" required>
-                        </div>
-                        <div class="form-group">
-                            <textarea placeholder="Mensaje" rows="5" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Enviar Mensaje</button>
-                    </form>
+                    <div class="contact__form">
+                        <form id="contactForm" class="contact-form">
+                            <div class="contact-form__group">
+                                <input type="text" id="name" class="contact-form__input" placeholder="Nombre completo"
+                                    required>
+                            </div>
+                            <div class="contact-form__group">
+                                <input type="email" id="email" class="contact-form__input"
+                                    placeholder="Correo electrónico" required>
+                            </div>
+                            <div class="contact-form__group">
+                                <select id="service" class="contact-form__input" required>
+                                    <option value="">Selecciona un servicio</option>
+                                    <option value="odoo">Desarrollo Odoo</option>
+                                    <option value="ai">Agentes AI</option>
+                                    <option value="automation">Automatización</option>
+                                    <option value="vps">Implementación VPS</option>
+                                    <option value="other">Otro</option>
+                                </select>
+                            </div>
+                            <div class="contact-form__group">
+                                <textarea id="message" class="contact-form__textarea"
+                                    placeholder="Describe tu proyecto..." required></textarea>
+                            </div>
+                            <button type="submit" class="btn btn--primary btn--full">Enviar Mensaje</button>
+                        </form>
+                    </div>
                 </div>
             </div>
         </section>
@@ -195,15 +382,51 @@
 
     <!-- Footer -->
     <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 3p3r4lt4. Todos los derechos reservados.</p>
-            <div class="social-links">
-                <a href="https://github.com/3p3r4lt4" target="_blank">GitHub</a>
+        <div class="container footer__container">
+            <div class="footer__content">
+                <div class="footer__info">
+                    <h3 class="footer__logo">EDUARDO PERALTA</h3>
+                    <p class="footer__description">Desarrollador especializado en Odoo, Agentes AI y automatización de
+                        procesos empresariales.</p>
+                </div>
+                <div class="footer__links">
+                    <h4 class="footer__links-title">Enlaces Rápidos</h4>
+                    <ul class="footer__links-list">
+                        <li><a href="#inicio" class="footer__link">Inicio</a></li>
+                        <li><a href="#habilidades" class="footer__link">Habilidades</a></li>
+                        <li><a href="#proyectos-ai" class="footer__link">Proyectos AI</a></li>
+                        <li><a href="#trabajos" class="footer__link">Portafolio</a></li>
+                    </ul>
+                </div>
+                <div class="footer__tech">
+                    <h4 class="footer__tech-title">Tecnologías</h4>
+                    <div class="footer__tech-list">
+                        <span>Odoo</span>
+                        <span>Python</span>
+                        <span>Botpress</span>
+                        <span>Make</span>
+                        <span>JavaScript</span>
+                        <span>PostgreSQL</span>
+                    </div>
+                </div>
+            </div>
+            <div class="footer__bottom">
+                <p class="footer__copyright">&copy; 2025 Eduardo Peralta. Todos los derechos reservados.</p>
+                <div class="footer__social">
+                    <a href="https://www.linkedin.com/in/eduardo-peralta-quicaño-a53766b8" target="_blank"
+                        class="footer__social-link">
+                        <i class="fab fa-linkedin"></i>
+                    </a>
+                    <a href="https://github.com/3p3r4lt4" target="_blank" class="footer__social-link">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" class="footer__social-link">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
             </div>
         </div>
     </footer>
-
-    <script src="js/script.js"></script>
 </body>
 
 </html>
