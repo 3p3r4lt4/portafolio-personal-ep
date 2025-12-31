@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     name: name,
                     email: email,
                     service: service,
-                    message: `[Servicio: ${getServiceName(service)}]\n\n${message}`
+                    message: message
                 };
                 
                 console.log('📋 Datos:', formData);
